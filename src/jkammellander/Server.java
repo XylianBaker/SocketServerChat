@@ -3,6 +3,9 @@ package jkammellander;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Server {
 
@@ -23,13 +26,17 @@ public class Server {
             while (!serverSocket.isClosed()) {
                 Socket socket = serverSocket.accept();
                 System.out.println("A new client has conencted 🥳 !");
-                ClientHandler clienthandler = new ClientHandler(socket);
 
+                Object lock = new Object();
+                ClientHandler clienthandler = new ClientHandler(socket, lock);
                 Thread thread = new Thread(clienthandler);
                 thread.start();
+                synchronized (lock) {
+                    lock.wait();
+                }
             }
 
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
