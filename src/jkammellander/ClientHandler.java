@@ -6,12 +6,15 @@ import java.util.ArrayList;
 
 public class ClientHandler implements Runnable{
 
+    // Creating a new ArrayList of ClientHandlers, a new Socket, a new BufferedReader, a new BufferedWriter, and a new
+    // String.
     public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
     private Socket socket;
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
     private String clientUsername;
 
+    // This is the constructor for the ClientHandler class. It is creating a new ClientHandler object.
     public ClientHandler(Socket socket) {
         try {
             this.socket = socket;
@@ -32,7 +35,7 @@ public class ClientHandler implements Runnable{
         while(socket.isConnected()) {
             try {
                 messageFromClient = bufferedReader.readLine();
-                broadcastMessage(messageFromClient);
+                // broadcastMessage(messageFromClient);
             } catch (IOException e) {
                 closeEverything(socket, bufferedReader, bufferedWriter);
                 break;
