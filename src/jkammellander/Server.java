@@ -24,13 +24,19 @@ public class Server {
         try {
 
             while (!serverSocket.isClosed()) {
+                // Creating a new socket and printing out a message to the console.
                 Socket socket = serverSocket.accept();
                 System.out.println("A new client has conencted 🥳 !");
 
+                // It creates a new object called lock, creates a new ClientHandler object and passes the socket and lock
+                // to it.
+                // Then it creates a new thread and passes the clienthandler to it.
                 Object lock = new Object();
                 ClientHandler clienthandler = new ClientHandler(socket, lock);
                 Thread thread = new Thread(clienthandler);
                 thread.start();
+
+                // It's waiting for the lock to be notified.
                 synchronized (lock) {
                     lock.wait();
                 }
